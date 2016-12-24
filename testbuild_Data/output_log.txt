@@ -1,0 +1,52 @@
+Initialize engine version: 5.4.2f1 (94e3a60ee258)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 10.1]
+    Renderer: Intel(R) HD Graphics 3000 (ID=0x116)
+    Vendor:   Intel
+    VRAM:     944 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.123 seconds
+Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\System.dll (this message is harmless)
+desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+Initialize engine version: 5.4.2f1 (94e3a60ee258)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 10.1]
+    Renderer: Intel(R) HD Graphics 3000 (ID=0x116)
+    Vendor:   Intel
+    VRAM:     944 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.099 seconds
+Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\System.dll (this message is harmless)
+desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+<RI> Initialized touch support.
+UnloadTime: 1.391309 ms
+UnloadTime: 1.366767 ms
+Setting up 1 worker threads for Enlighten.
+  Thread -> id: da0 -> priority: 1 
+Setting up 1 worker threads for Enlighten.
+  Thread -> id: 478 -> priority: 1 
