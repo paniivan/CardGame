@@ -1,20 +1,9 @@
 ﻿using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine;
 
 public class Card : NetworkBehaviour {
 
-    [SyncVar]
-    private Image img;
-    [SyncVar]
-    private int val = 0;
-    //private suit;
-
-
-    private void ChangeImg()
-    {
-
-    }
-
-
-
+    public CardData cd;
+    public enum CardSuit { Spades, Clubs, Diamonds, Hearts };
 }
