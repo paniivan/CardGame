@@ -174,6 +174,8 @@ public class Deck : NetworkBehaviour {
         if (players.Count == 2)
         {
             //start game
+            //this.PassPlayersToTable();
+
             for (int i = 0; i < 6; i++)
             {
                 foreach (Player player in players)
@@ -189,6 +191,11 @@ public class Deck : NetworkBehaviour {
         CardData cd = this.GetTopCard();
         p.RpcTakeCard(cd);
     }
+    
+    //private void PassPlayersToTable()
+    //{
+    //    GameObject.Find("Table").GetComponent<Table>().InitPlayers(this.players);
+    //}
 
 }
 

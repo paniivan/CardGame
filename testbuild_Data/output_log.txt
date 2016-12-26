@@ -14,29 +14,9 @@ Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngi
 Loading D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.063 seconds
+- Completed reload, in  0.084 seconds
 Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild_Data\Managed\System.dll (this message is harmless)
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
-<RI> Initialized touch support.
-UnloadTime: 1.353827 ms
-In register player
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-In CmdAskForTrump
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-In register player
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-In SendTrumpCardData
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Setting up 1 worker threads for Enlighten.
-  Thread -> id: 1680 -> priority: 1 

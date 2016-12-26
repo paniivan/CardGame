@@ -48,8 +48,11 @@
      <Compile Include="Assets\Scripts\Card.cs" />
      <Compile Include="Assets\Scripts\CardData.cs" />
      <Compile Include="Assets\Scripts\Deck.cs" />
+     <Compile Include="Assets\Scripts\Dragable.cs" />
+     <Compile Include="Assets\Scripts\HandDropZone.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\Table.cs" />
+     <Compile Include="Assets\Scripts\TableDropZone.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

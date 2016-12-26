@@ -1,12 +1,249 @@
-﻿using UnityEngine.Networking;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.UI;
 
-public class Table : NetworkBehaviour {
+public class Table : NetworkBehaviour
+{
 
-    [SyncVar]
-    private int n;
+    //[SyncVar]
+    //private int n;
 
-    public void SetN(int n)
+    //public void SetN(int n)
+    //{
+    //    this.n = n;
+    //}
+
+    //TODO: mb this logic should be stored smhow in other way
+    //is player attacks or defends
+    private bool offenceMode;
+
+    public GameObject offenceLayer;
+    public GameObject defenceLayer;
+
+    private GameObject placeholder;
+
+    private List<CardData> servOffLayer = new List<CardData>();
+    private List<CardData> servDefLayer = new List<CardData>();
+
+    //private List<Player> players;
+
+    public Deck deck;
+
+    void Awake()
     {
-        this.n = n;
+        //TODO: here should be some checks
+        this.offenceMode = true;
+        //this.offenceLayer = GameObject.Find("Offence layer");
+        //this.defenceLayer = GameObject.Find("Defence layer");
+        //this.deck = GameObject.Find("Deck").GetComponent<Deck>();
     }
+
+    public void ProposeCard(CardData cd, Player player)
+    {
+        //if table awaits offencive move
+        if (offenceMode)
+        {
+            if (CanBePassed(cd))
+            {
+                this.AddToTable(cd, player);
+                this.SwitchTableMode();
+                Debug.Log("Nice move!");
+                //TODO: some signal to players
+            }
+            else
+            {
+                // return card to player
+                Debug.Log("Bad move!");
+                player.RpcTakeCard(cd);
+            }
+        }
+        else
+        {
+            Debug.Log("In ProposeCard defence mode");
+            if (CardCanBeat(cd))
+            {
+                this.AddToTable(cd, player);
+                this.SwitchTableMode();
+                Debug.Log("Nice move!");
+                //TODO: some signal to players
+            }
+            else
+            {
+                Debug.Log("Bad move!");
+                player.RpcTakeCard(cd);
+            }
+        }
+    }
+
+    private CardData GetNotBeatedCard()
+    {
+        Debug.Log("in GetNotBeatedCard");
+        //if there is not beated card on the table
+        if (servOffLayer.Count - servDefLayer.Count > 0)
+        {
+            return servOffLayer[servOffLayer.Count - 1];
+        }
+        else
+        {
+            throw new InvalidOperationException("There is no unbeated card.");
+        }
+    }
+
+    private bool ContainCardWithValue(int cardValue)
+    {
+        foreach (CardData cd in servOffLayer)
+        {
+            if (cd.val == cardValue)
+            {
+                return true;
+            }
+        }
+
+        foreach (CardData cd in servDefLayer)
+        {
+            if (cd.val == cardValue)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void Clean()
+    {
+        for (int i = 0; i < offenceLayer.transform.childCount; i++)
+        {
+            //mb offenceLayer.transform.GetChild(i).gameObject
+            Destroy(offenceLayer.transform.GetChild(i));
+        }
+        for (int i = 0; i < defenceLayer.transform.childCount; i++)
+        {
+            Destroy(defenceLayer.transform.GetChild(i));
+        }
+        servOffLayer.Clear();
+        servDefLayer.Clear();
+    }
+
+    public void TakeCards(Transform newParent)
+    {
+        //TODO: need to be reworked
+        for (int i = 0; i < offenceLayer.transform.childCount; i++)
+        {
+            offenceLayer.transform.GetChild(i).SetParent(newParent);
+        }
+
+        for (int i = 0; i < defenceLayer.transform.childCount; i++)
+        {
+            defenceLayer.transform.GetChild(i).SetParent(newParent);
+        }
+    }
+
+    private bool IsEmpty()
+    {
+        if (servOffLayer.Count == 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool CanBePassed(CardData cd)
+    {
+        return ContainCardWithValue(cd.val) || IsEmpty();
+    }
+
+    private bool CardCanBeat(CardData cd)
+    {
+        Debug.Log("In CardCanBeat");
+        CardData cardToBeat = this.GetNotBeatedCard();
+
+        if (cd.suit == cardToBeat.suit && cd.val > cardToBeat.val)
+        {
+            return true;
+        }
+        else if (cd.suit == deck.GetTrumpSuit())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    //private void AddToTable(Dragable dragable)
+    //{
+    //    Transform newParent;
+    //    if (offenceMode)
+    //    {
+    //        newParent = offenceLayer.transform;
+    //    }
+    //    else
+    //    {
+    //        newParent = defenceLayer.transform;
+    //    }
+
+    //    dragable.transform.SetParent(newParent);
+    //    dragable.enabled = false;
+    //}
+
+    private void AddToTable(CardData cd, Player player)
+    {
+        if (this.offenceMode)
+        {
+            servOffLayer.Add(cd);
+        }
+        else
+        {
+            servDefLayer.Add(cd);
+        }
+
+        //foreach (Player p in this.players)
+        //{
+        //    p.RpcAddCardToTable(cd, this.offenceMode);
+        //}
+        player.RpcAddCardToTable(cd, this.offenceMode);
+    }
+
+    private void ReturnToHand(Dragable card)
+    {
+        card.ToHand();
+    }
+
+    //public void InitPlayers(List<Player> players)
+    //{
+    //    this.players = players;
+    //}
+
+    private void SwitchTableMode()
+    {
+        this.offenceMode = !this.offenceMode;
+    }
+
+    public void CreatePlaceholder()
+    {
+        this.placeholder = new GameObject();
+        placeholder.name = "CardPlaceholder";
+        placeholder.transform.SetParent(this.defenceLayer.transform);
+        LayoutElement le = placeholder.AddComponent<LayoutElement>();
+        le.preferredWidth = 50;
+        le.preferredHeight = 70;
+        le.flexibleWidth = 0;
+        le.flexibleHeight = 0;
+
+        //placeholder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
+    }
+
+    public void DeletePlaceholder()
+    {
+        Destroy(this.placeholder);
+    }
+
+
+
+
+
+
+
 }
