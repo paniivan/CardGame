@@ -7,12 +7,13 @@ public class Player : NetworkBehaviour {
     private Deck deck;
     private Table table;
 
+    //magic numbers!!
     private const float startYPosition = 148f;
     private GameObject parent;
     private HandDropZone hdz;
     private TableDropZone tdz;
 
-    public bool offenceMode;
+    public bool blockedMode;
 
     void Awake()
     {
@@ -47,11 +48,12 @@ public class Player : NetworkBehaviour {
         //server(host player) make move first
         if (isServer)
         {
-            this.offenceMode = true;
+            this.blockedMode = false;
         }
         else
         {
-            this.offenceMode = false;
+            this.blockedMode = true;
+            table.gameObject.GetComponent<TableDropZone>().enabled = false;
         }
     }
 
@@ -59,12 +61,40 @@ public class Player : NetworkBehaviour {
     {
         transform.localPosition = new Vector3(0, startYPosition);
     }
-
-     /**
-     * test method
-     */
+    
     void OnGUI()
     {
+        //if u r attacker and u did give at least one card already
+        if (isLocalPlayer && !this.blockedMode && table.offenceMode && !table.ClientIsEmpty())
+        {
+            if (GUI.Button(new Rect(10, 250, 100, 50), "End move"))
+            {
+                this.CmdCleanTable();
+
+                this.CmdSwitchPlayersMode();
+                
+                this.CmdRefillHands();
+            }
+        }
+
+        //if u r defender and there are(is) card(s) on table to take
+        if (isLocalPlayer && !this.blockedMode && !table.offenceMode && !table.ClientIsEmpty())
+        {
+            if (GUI.Button(new Rect(10, 250, 100, 50), "Take cards"))
+            {
+                this.CmdTakeCards();
+                this.CmdCleanTable();
+
+                //this.CmdSwitchDisablingTableDropzone();
+                this.CmdSwitchPlayersMode();
+                this.CmdSwitchTableMode();
+
+                this.CmdRefillHands();
+            }
+        }
+
+
+
         //if (GUI.Button(new Rect(400, 10, 50, 50), "Change table number"))
         //{
         //    CmdchangeTable(Random.Range(1, 100));
@@ -117,16 +147,22 @@ public class Player : NetworkBehaviour {
     [ClientRpc]
     public void RpcTakeCard(CardData cd)
     {
+        GameObject card;
         if (isLocalPlayer)
         {
-            GameObject card = deck.CreateCard(cd, this.transform);
+            card = deck.CreateCard(cd);
+            card.transform.SetParent(this.transform);
+            ////changing players hand size on the server
+            //deck.CmdChangePlayersHandSize(this, 1);
         }
         else
         {
             //terrible crutch
             //if not local player make card flip and show the back
             cd.val = -1;
-            GameObject card = deck.CreateCard(cd, this.transform);
+            card = deck.CreateCard(cd);
+            card.transform.SetParent(this.transform);
+            card.GetComponent<Dragable>().enabled = false;
         }
     }
 
@@ -137,31 +173,25 @@ public class Player : NetworkBehaviour {
     }
 
     [ClientRpc]
-    public void RpcSetOffenceMode(bool b)
+    public void RpcSwitchPlayersMode()
     {
-        //if changing albablabkjdkfjsdf
-        this.offenceMode = b;
+        if (isLocalPlayer)
+        {
+            this.blockedMode = !this.blockedMode;
+            table.gameObject.GetComponent<TableDropZone>().enabled
+                   = !table.gameObject.GetComponent<TableDropZone>().enabled;
+        }
     }
 
-    [ClientRpc]
-    public void RpcAddCardToTable(CardData cd, bool tableLayer)
-    {
-        Transform cardParent;
-        if (tableLayer)
-        {
-            cardParent = table.offenceLayer.transform;
-            //adding placeholder to defenceLayer
-            table.CreatePlaceholder();
-        }
-        else
-        {
-            cardParent = table.defenceLayer.transform;
-            table.DeletePlaceholder();
-        }
-
-        //adding card to client table
-        deck.CreateCard(cd, cardParent);
-    }
+    //[ClientRpc]
+    //public void RpcSwitchDisablingTableDropzone()
+    //{
+    //    if (isLocalPlayer)
+    //    {
+    //        table.gameObject.GetComponent<TableDropZone>().enabled
+    //               = !table.gameObject.GetComponent<TableDropZone>().enabled;
+    //    }
+    //}
     
     [Command]
     public void CmdDestroyOneCard()
@@ -178,4 +208,46 @@ public class Player : NetworkBehaviour {
         }
     }
 
+    [ClientRpc]
+    public void RpcShowEndGameMssg(string mssg)
+    {
+        Debug.Log(mssg);
+    }
+
+    [Command]
+    private void CmdCleanTable()
+    {
+        this.table.Clean();
+    }
+
+    [Command]
+    private void CmdSwitchPlayersMode()
+    {
+        this.deck.SwitchPlayersMode();
+    }
+
+    [Command]
+    private void CmdSwitchTableMode()
+    {
+        this.table.SwitchTableMode();
+    }
+
+    //[Command]
+    //private void CmdSwitchDisablingTableDropzone()
+    //{
+    //    this.deck.SwitchDisablingTableDropzone();
+    //}
+
+    [Command]
+    private void CmdRefillHands()
+    {
+        this.deck.RefillHands();
+    }
+
+    [Command]
+    private void CmdTakeCards()
+    {
+        int numOfCards = this.table.TakeCards(this);
+        this.deck.ChangePlayersHandSize(this, numOfCards);
+    }
 }

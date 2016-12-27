@@ -70,7 +70,8 @@ public class Dragable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void ToHand()
     {
-        this.transform.SetParent(hand.transform);
+        this.transform.SetParent(hand);
+        this.transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
     }
     
     private void CreatePlaceholder()

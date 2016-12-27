@@ -17,7 +17,10 @@ public class Table : NetworkBehaviour
 
     //TODO: mb this logic should be stored smhow in other way
     //is player attacks or defends
-    private bool offenceMode;
+
+    //should it be a syncvar?
+    [SyncVar]
+    public bool offenceMode;
 
     public GameObject offenceLayer;
     public GameObject defenceLayer;
@@ -40,6 +43,10 @@ public class Table : NetworkBehaviour
         //this.deck = GameObject.Find("Deck").GetComponent<Deck>();
     }
 
+
+    /**
+     * always on server
+     */
     public void ProposeCard(CardData cd, Player player)
     {
         //if table awaits offencive move
@@ -49,6 +56,9 @@ public class Table : NetworkBehaviour
             {
                 this.AddToTable(cd, player);
                 this.SwitchTableMode();
+                this.deck.SwitchPlayersMode();
+                //this.deck.SwitchDisablingTableDropzone();
+                //this.deck.SwitchTableMode();
                 Debug.Log("Nice move!");
                 //TODO: some signal to players
             }
@@ -65,7 +75,11 @@ public class Table : NetworkBehaviour
             if (CardCanBeat(cd))
             {
                 this.AddToTable(cd, player);
+                //on serv
                 this.SwitchTableMode();
+                //on clients
+                this.deck.SwitchPlayersMode();
+                //this.deck.SwitchDisablingTableDropzone();
                 Debug.Log("Nice move!");
                 //TODO: some signal to players
             }
@@ -112,38 +126,43 @@ public class Table : NetworkBehaviour
         return false;
     }
 
-    private void Clean()
+    /**
+     * serv only
+     */
+    public int TakeCards(Player p)
     {
-        for (int i = 0; i < offenceLayer.transform.childCount; i++)
+        List<CardData> cardsToTake = new List<CardData>();
+
+        for (int i = 0; i < this.servOffLayer.Count; i++)
         {
-            //mb offenceLayer.transform.GetChild(i).gameObject
-            Destroy(offenceLayer.transform.GetChild(i));
+            cardsToTake.Add(this.servOffLayer[i]);
         }
-        for (int i = 0; i < defenceLayer.transform.childCount; i++)
+
+        for (int i = 0; i < this.servDefLayer.Count; i++)
         {
-            Destroy(defenceLayer.transform.GetChild(i));
+            cardsToTake.Add(this.servDefLayer[i]);
         }
-        servOffLayer.Clear();
-        servDefLayer.Clear();
+
+        foreach (CardData card in cardsToTake)
+        {
+            p.RpcTakeCard(card);
+        }
+
+        return cardsToTake.Count;
     }
 
-    public void TakeCards(Transform newParent)
-    {
-        //TODO: need to be reworked
-        for (int i = 0; i < offenceLayer.transform.childCount; i++)
-        {
-            offenceLayer.transform.GetChild(i).SetParent(newParent);
-        }
-
-        for (int i = 0; i < defenceLayer.transform.childCount; i++)
-        {
-            defenceLayer.transform.GetChild(i).SetParent(newParent);
-        }
-    }
-
-    private bool IsEmpty()
+    public bool IsEmpty()
     {
         if (servOffLayer.Count == 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool ClientIsEmpty()
+    {
+        if (offenceLayer.transform.childCount == 0)
         {
             return true;
         }
@@ -164,7 +183,7 @@ public class Table : NetworkBehaviour
         {
             return true;
         }
-        else if (cd.suit == deck.GetTrumpSuit())
+        else if (cd.suit == deck.GetTrumpSuit() && cardToBeat.suit != deck.GetTrumpSuit())
         {
             return true;
         }
@@ -190,6 +209,7 @@ public class Table : NetworkBehaviour
 
     private void AddToTable(CardData cd, Player player)
     {
+        //server part
         if (this.offenceMode)
         {
             servOffLayer.Add(cd);
@@ -199,24 +219,50 @@ public class Table : NetworkBehaviour
             servDefLayer.Add(cd);
         }
 
-        //foreach (Player p in this.players)
-        //{
-        //    p.RpcAddCardToTable(cd, this.offenceMode);
-        //}
-        player.RpcAddCardToTable(cd, this.offenceMode);
+        deck.ChangePlayersHandSize(player, -1);
+
+        //client part
+
+        this.RpcAddToTable(cd, this.offenceMode);
+        //player.RpcAddCardToTable(cd, this.offenceMode);
     }
 
-    private void ReturnToHand(Dragable card)
+    /**
+     * recieving offenceMode as parameter in case it will be changed during data sending
+     */
+    [ClientRpc]
+    private void RpcAddToTable(CardData cd, bool offenceMode)
     {
-        card.ToHand();
+        Transform cardParent;
+        if (offenceMode)
+        {
+            cardParent = this.offenceLayer.transform;
+            //adding placeholder to defenceLayer
+            this.CreatePlaceholder();
+        }
+        else
+        {
+            cardParent = this.defenceLayer.transform;
+            this.DeletePlaceholder();
+        }
+
+        //adding card to client table
+        GameObject card = deck.CreateCard(cd);
+        card.transform.SetParent(cardParent);
+        card.GetComponent<Dragable>().enabled = false;
     }
+
+    //private void ReturnToHand(Dragable card)
+    //{
+    //    card.ToHand();
+    //}
 
     //public void InitPlayers(List<Player> players)
     //{
     //    this.players = players;
     //}
 
-    private void SwitchTableMode()
+    public void SwitchTableMode()
     {
         this.offenceMode = !this.offenceMode;
     }
@@ -239,11 +285,29 @@ public class Table : NetworkBehaviour
     {
         Destroy(this.placeholder);
     }
+    
+    /**
+     * serv only
+     */
+    public void Clean()
+    {
+        servOffLayer.Clear();
+        servDefLayer.Clear();
+        this.RpcClean();
+    }
 
+    [ClientRpc]
+    private void RpcClean()
+    {
+        for (int i = 0; i < offenceLayer.transform.childCount; i++)
+        {
+            Destroy(offenceLayer.transform.GetChild(i).gameObject);
+        }
+        for (int i = 0; i < defenceLayer.transform.childCount; i++)
+        {
+            Destroy(defenceLayer.transform.GetChild(i).gameObject);
+        }
+    }
 
-
-
-
-
-
+    
 }

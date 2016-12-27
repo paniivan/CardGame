@@ -7,7 +7,7 @@ public class HandDropZone : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("over hand!");
+        //Debug.Log("over hand!");
         if (eventData.pointerDrag == null)
         {
             return;
@@ -22,7 +22,8 @@ public class HandDropZone : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if(eventData.pointerDrag == null)
+        //Debug.Log("over hand = false");
+        if (eventData.pointerDrag == null)
         {
             return;
         }

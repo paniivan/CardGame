@@ -14,46 +14,21 @@ Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild2_Data\Managed\UnityEng
 Loading D:\TheGame\TestNetworkSpawn2\testbuild2_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild2_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading D:\TheGame\TestNetworkSpawn2\testbuild2_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.088 seconds
+- Completed reload, in  0.110 seconds
 Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild2_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\TheGame\TestNetworkSpawn2\testbuild2_Data\Managed\System.dll (this message is harmless)
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.232466 ms
-In register player
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-In CmdAskForTrump
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-In register player
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
+UnloadTime: 1.153038 ms
 In SendTrumpCardData
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
-over table!
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-Log: connection {1} has been disconnected by timeout; address {::ffff:127.0.0.1:51859}
-Server client disconnect error:1
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-OnDisconnectError error:6
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
-over table!
+You win!
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 18bc -> priority: 1 
+  Thread -> id: 1a94 -> priority: 1 

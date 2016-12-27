@@ -7,7 +7,7 @@ public class TableDropZone : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("over table!");
+        //Debug.Log("over table!");
         if (eventData.pointerDrag == null)
         { 
             return;
